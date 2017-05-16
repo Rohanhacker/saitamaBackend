@@ -1,5 +1,4 @@
 from flask import Flask, request, jsonify
-from timeout import timeout
 import threading
 import requests
 import time
@@ -74,7 +73,7 @@ def search():
     return jsonify(result)
 
 if __name__ == '__main__':
-    app.run(threaded=True, debug=True)
+    app.run(threaded=True)
 
 
 
