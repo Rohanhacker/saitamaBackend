@@ -6,25 +6,19 @@ import time
 result = {
     'query': '',
     'results': {
-        'google': {
-            'url': '',
-            'text': ''
-        },
-        'twitter': {
-            'url': '',
-            'text': ''
-        },
-        'duckduckgo': {
-            'url': '',
-            'text': ''
-        }
+        'google': '',
+        'twitter': '',
+        'duckduckgo': ''
     }
 }
+
+timeout = 1
 
 
 def searchDuck(keyword):
     try:
-        req = requests.get('http://api.duckduckgo.com/?q={}&format=json'.format(keyword),timeout=1)
+        url = 'http://api.duckduckgo.com/?q={}&format=json'.format(keyword)
+        req = requests.get(url,timeout=timeout)
         results = req.json()
         # print(results.get('Heading'), results.get('AbstractURL'))
         result['results']['duckduckgo'] = { 'url': results.get('AbstractURL'), 'text': results.get('Heading') } 
@@ -33,7 +27,8 @@ def searchDuck(keyword):
 
 def searchGoogle(keyword):
     try:
-        req = requests.get('https://www.googleapis.com/customsearch/v1?key=AIzaSyC-7M6lMWbYroXnZ3Y3AoBc8lcOLp52MFI&cx=001033254069548393564:3z8-gnrutii&fields=items(title,link)&q={}'.format(keyword),timeout=1)
+        url = 'https://www.googleapis.com/customsearch/v1?key=AIzaSyC-7M6lMWbYroXnZ3Y3AoBc8lcOLp52MFI&cx=001033254069548393564:3z8-gnrutii&fields=items(title,link)&q={}'.format(keyword)
+        req = requests.get(url,timeout=timeout)
         results = req.json()['items'][0]
         # print(results.get('link'), results.get('title'))
         result['results']['google'] = { 'url': results.get('link'), 'text': results.get('title')}
@@ -45,7 +40,8 @@ def searchGoogle(keyword):
 def searchTwitter(keyword):
     try:
         headers = {'Authorization': 'Bearer AAAAAAAAAAAAAAAAAAAAAB290gAAAAAA6eGMVV8n0q1OgI%2BmgiMD0pCiVhc%3Dqj3jaBNPsp7kfS3siPuHL4ZG5Cfl6kzCsD9fd0FWwU5Fm9vBcF'}
-        req = requests.get('https://api.twitter.com/1.1/search/tweets.json?q={}'.format(keyword), headers=headers, timeout=1)
+        url = 'https://api.twitter.com/1.1/search/tweets.json?q={}'.format(keyword)
+        req = requests.get(url, headers=headers, timeout=timeout)
         results = req.json()['statuses'][0]
         # print(results.get('text'), results['entities']['urls'])
         result['results']['twitter'] = {'url': 'https://twitter.com/statuses/{}'.format(results.get('id')), 'text': results.get('text')}
